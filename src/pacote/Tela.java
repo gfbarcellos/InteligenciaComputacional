@@ -50,7 +50,7 @@ public class Tela extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(305, 338));
         jPanel1.setLayout(new javax.swing.OverlayLayout(jPanel1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\gbarc\\Desktop\\Labirinto.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/Labirinto.png"))); // NOI18N
         jPanel1.add(jLabel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
