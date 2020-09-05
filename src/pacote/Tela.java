@@ -29,26 +29,6 @@ public class Tela extends javax.swing.JFrame {
     public void paint(Graphics grphcs) {
         super.paint(grphcs);
 
-        /*   
-        for(int linha=0; linha<10;linha++)
-        {
-            for(int coluna=0;coluna <10;coluna++)
-            {
-                Color color;
-                switch(labirinto[linha][coluna])
-                {
-                    case 0: color = Color.BLACK; break;
-                    case 2: color = Color.RED; break;
-                    default : color = Color.WHITE;
-                }
-                grphcs.setColor(color);
-                grphcs.fillRect(30*coluna, 30*linha, 30, 30);
-                grphcs.setColor(Color.BLACK);
-                grphcs.drawRect(30*coluna, 30*linha, 30, 30);
-            }
-        }
-        */
-        
         grphcs.setColor(Color.GREEN);
         grphcs.fillOval(2*30+3, 6*30-7, 25, 25);
     }
