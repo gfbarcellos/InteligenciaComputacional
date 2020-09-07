@@ -19,10 +19,6 @@ public class Populacao
         }
     }
     
-    public void setIndividuo(Individuo individuo, int posicao) {
-        individuos[posicao] = individuo;
-    }
-    
     public void setIndividuo(Individuo individuo) {
         for (int i = 0; i < individuos.length; i++) {
             if (individuos[i] == null) {
@@ -74,6 +70,10 @@ public class Populacao
         }
         return num;
     }
+    
+     public void setIndividuo(Individuo individuo, int posicao) {
+        individuos[posicao] = individuo;
+    }  
       
     public int getTamPopulacao() {
         return tamPopulacao;
