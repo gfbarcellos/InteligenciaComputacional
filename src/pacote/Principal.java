@@ -14,8 +14,11 @@ public class Principal {
             {
                 //TelaLabirinto tela = new TelaLabirinto();
                // tela.setVisible(true);
-                Tela tela = new Tela();
-                tela.setVisible(true);
+                
+               // Tela tela = new Tela();
+               // tela.setVisible(true);
+                
+                System.out.println(Algoritmo.matriz[8][1]);
             }
         });
         
