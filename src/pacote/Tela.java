@@ -7,6 +7,10 @@ package pacote;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -15,6 +19,8 @@ import javax.swing.JFrame;
  */
 public class Tela extends javax.swing.JFrame {
 
+    public static int linha = 10;
+    public static int coluna = 1;
     /**
      * Creates new form Tela
      */
@@ -30,9 +36,14 @@ public class Tela extends javax.swing.JFrame {
         super.paint(grphcs);
 
         grphcs.setColor(Color.GREEN);
-        grphcs.fillOval(Principal.coluna*30+3, Principal.linha*30-7, 25, 25);
-        
+        grphcs.fillOval(coluna*30+3, linha*30-7, 25, 25);
         repaint();
+    }
+    
+    @Override
+    protected void processKeyEvent(KeyEvent ke) 
+    {
+
     }
 
     /**
@@ -46,6 +57,23 @@ public class Tela extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jSlider2 = new javax.swing.JSlider();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        valorPopulacao = new javax.swing.JTextField();
+        valorCross = new javax.swing.JLabel();
+        jSlider3 = new javax.swing.JSlider();
+        valorMutacao = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        nGeracoes = new javax.swing.JLabel();
+        nAptidao = new javax.swing.JLabel();
+        nMovimentacao = new javax.swing.JLabel();
+        nAptidao2 = new javax.swing.JLabel();
+        nGeracao2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,23 +83,280 @@ public class Tela extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagem/Labirinto.png"))); // NOI18N
         jPanel1.add(jLabel1);
 
+        jButton1.setText("Executar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Taxa de mutação");
+
+        jSlider2.setMajorTickSpacing(100);
+        jSlider2.setMinorTickSpacing(5);
+        jSlider2.setPaintLabels(true);
+        jSlider2.setPaintTicks(true);
+        jSlider2.setValue(80);
+        jSlider2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider2StateChanged(evt);
+            }
+        });
+
+        jLabel3.setText("Taxa de cross-over");
+
+        jLabel4.setText("Tamanho da população:");
+
+        valorPopulacao.setText("100");
+        valorPopulacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valorPopulacaoActionPerformed(evt);
+            }
+        });
+
+        valorCross.setText("10");
+
+        jSlider3.setMajorTickSpacing(100);
+        jSlider3.setMinorTickSpacing(5);
+        jSlider3.setPaintLabels(true);
+        jSlider3.setPaintTicks(true);
+        jSlider3.setValue(10);
+        jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider3StateChanged(evt);
+            }
+        });
+
+        valorMutacao.setText("80");
+
+        jLabel5.setText("Geração:");
+
+        jLabel6.setText("Aptidão:");
+
+        jLabel7.setText("Movimentações:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 300, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(nGeracoes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(nGeracao2, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+                                .addGap(378, 378, 378))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(nMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(nAptidao2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(nAptidao, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jLabel2)
+                                .addGap(37, 37, 37)
+                                .addComponent(valorCross, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(valorPopulacao, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(valorMutacao, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(14, 14, 14)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton1)
+                                .addGap(41, 41, 41)))))
+                .addGap(69, 69, 69))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(nGeracoes))
+                    .addComponent(nGeracao2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(nAptidao, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nAptidao2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(nMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(valorPopulacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(valorMutacao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(valorCross)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public void desenhaCaminho(String[] caminho)
+    {   
+        linha = 10;
+        coluna = 1;
+        Graphics g = getGraphics();
+        update(g);
+        for(int i=0;i<20;i++)
+        {   
+             switch(caminho[i])
+            {   
+                //leste ->
+                case "00": coluna++;break;
+                //norte
+                case "01": linha--;break;  
+                //oeste <-
+                case "10": coluna--;break;
+                //sul
+                case "11": linha++;break;
+                
+                default: System.out.println("Erro no caminho");
+            }
+
+            if(linha == 3 && coluna == 8)
+            {
+                nMovimentacao.setText(Integer.toString(i+1));
+                break;
+            }
+            nMovimentacao.setText(Integer.toString(i+1));
+            
+            update(g);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }
+    }
+    
+    public void executar(int tamPop, int crossover, int mutacao)
+    {
+        int numMaxGeracoes = 1500;
+        int geracao = 0;
+        int numSolucao = 0;
+        
+        boolean temSolucao = false;
+        boolean elitismo = true;
+        
+        double txcross;
+        double txmutacao;
+        
+        txcross = crossover;
+        txcross = txcross /100;
+        txmutacao = mutacao;
+        txmutacao = txmutacao /100;
+        
+        Algoritmo.setTaxaDeCrossover(txcross);
+        Algoritmo.setTaxaDeMutacao(txmutacao);
+        
+        Populacao populacao = new Populacao(20, tamPop);
+        while( !temSolucao && geracao < numMaxGeracoes )
+        {
+            geracao++;//Incrementa a geração
+            populacao = Algoritmo.novaGeracao(populacao, elitismo);//Cria uma nova geração
+            temSolucao = populacao.temSolucao(1, 8);//Verifica se caiu no ponto de chegada
+            //System.out.println("Geração " + geracao + " | Aptidão: " + populacao.getIndividuo(0).getAptidao() );
+            
+            //Se possui um indivíduo com a solução
+            if(temSolucao)
+            {
+                String[] caminho = populacao.getIndividuo(0).getCaminho();
+                numSolucao++;
+                temSolucao = false;
+                if(numSolucao > 30)
+                {
+                    //System.out.println("Encontrou solução" + "|" + distancia);
+                    nGeracao2.setText(Integer.toString(geracao));
+                    nAptidao2.setText(Integer.toString(populacao.getIndividuo(0).getAptidao()));
+                    desenhaCaminho(caminho);
+                    break;
+                }
+            }
+            if(geracao == numMaxGeracoes)
+            {
+                break;
+            }
+        }
+        
+    }
+   
+    public int getTamPop()
+    {
+        return Integer.parseInt(valorPopulacao.getText());
+    }
+    
+    public int getCrossover()
+    {
+        return Integer.parseInt(valorCross.getText());
+    }
+    
+    public int getMutacao()
+    {
+        return Integer.parseInt(valorMutacao.getText());
+    }
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        linha = 10;
+        coluna = 1;
+        executar(getTamPop(),getCrossover(), getMutacao());
+        //desenhaCaminho();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void valorPopulacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorPopulacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_valorPopulacaoActionPerformed
+
+    private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
+        valorCross.setText(String.valueOf(jSlider3.getValue())); 
+    }//GEN-LAST:event_jSlider3StateChanged
+
+    private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider2StateChanged
+        valorMutacao.setText(String.valueOf(jSlider2.getValue()));
+    }//GEN-LAST:event_jSlider2StateChanged
 
     /**
      * @param args the command line arguments
@@ -109,7 +394,24 @@ public class Tela extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSlider jSlider2;
+    private javax.swing.JSlider jSlider3;
+    private javax.swing.JLabel nAptidao;
+    private javax.swing.JLabel nAptidao2;
+    private javax.swing.JLabel nGeracao2;
+    private javax.swing.JLabel nGeracoes;
+    private javax.swing.JLabel nMovimentacao;
+    private javax.swing.JLabel valorCross;
+    private javax.swing.JLabel valorMutacao;
+    private javax.swing.JTextField valorPopulacao;
     // End of variables declaration//GEN-END:variables
 }

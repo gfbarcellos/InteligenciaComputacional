@@ -7,6 +7,7 @@ package pacote;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 
 
@@ -32,7 +33,7 @@ public class TelaLabirinto extends JFrame
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);     
     }
-
+    
 
     @Override
     public void paint(Graphics grphcs) {

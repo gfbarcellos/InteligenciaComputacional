@@ -15,8 +15,8 @@ import java.util.Random;
 public class Algoritmo 
 {   
     private static int tamanhoCaminho = 20;
-    private static double taxaDeMutacao = 0.1;
-    private static double taxaDeCrossover = 0.7;
+    private static double taxaDeMutacao;
+    private static double taxaDeCrossover;
     
     public static int[][] matriz =
     {   
@@ -185,7 +185,7 @@ public class Algoritmo
         populacaoIntermediaria.setIndividuo(populacao.getIndividuo(r.nextInt(populacao.getTamPopulacao())));
         populacaoIntermediaria.setIndividuo(populacao.getIndividuo(r.nextInt(populacao.getTamPopulacao())));
         populacaoIntermediaria.setIndividuo(populacao.getIndividuo(r.nextInt(populacao.getTamPopulacao())));
-
+        
         //ordena a populaÃ§Ã£o
         populacaoIntermediaria.ordenaPopulacao();
 
@@ -198,10 +198,6 @@ public class Algoritmo
         return pais;
     }
     
-    public int[][] getMatriz()
-    {
-        return this.matriz;
-    }
     
     public static double getTaxaDeCrossover() {
         return taxaDeCrossover;

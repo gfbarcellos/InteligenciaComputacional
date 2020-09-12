@@ -61,6 +61,7 @@ public class Individuo
     private void geraAptidao()
     {   
         String posicao = "";
+        int distancia = 0;
         for(int i=0;i<20;i++)
         {   
             int linhaAux = linhaatual;
@@ -76,10 +77,15 @@ public class Individuo
                 //sul
                 case "11": this.linhaatual++;posicao = "S";break;
                 
-                default: System.out.println("Erro no caminho");
+                //default: System.out.println("Erro no caminho");
             }
             if( linhaatual  >0  && linhaatual  <9  && colunaatual > 0 && colunaatual <9)
             {
+                if(linhaatual == 1 && colunaatual == 8)
+                {
+                    distancia++;
+                    break;
+                }
                 boolean flagParede = false;
                 for(int j=0;j<Algoritmo.paredes.length;j++)
                 {        
@@ -98,21 +104,22 @@ public class Individuo
                 }
                 if (flagParede)
                 {
-                    aptidao = aptidao - 20;
+                    aptidao = aptidao - 400;distancia=20;break;
                 }
                 else
                 {
-                    aptidao = aptidao + 5; //Caminho válido
+                    aptidao = aptidao + 10; //Caminho válido
                 }
             }
             else
             {
-                aptidao = aptidao - 100;
-            }   
+                aptidao = aptidao - 1000;distancia=20;break;
+            }  
+            distancia++;
         }
-        aptidao = aptidao - ( linhaatual - 1 ) * 3;
-        aptidao = aptidao - ( 8 - colunaatual ) * 3;
-        //System.out.println("/Ap:" + aptidao);  
+        aptidao = aptidao - ( ( distancia )*50 );
+        aptidao = aptidao - ( ( linhaatual - 1 ) * 5);
+        aptidao = aptidao - ( ( 8 - colunaatual ) * 5);
     }
     
     public int getAptidao() 
