@@ -30,7 +30,9 @@ public class Tela extends javax.swing.JFrame {
         super.paint(grphcs);
 
         grphcs.setColor(Color.GREEN);
-        grphcs.fillOval(2*30+3, 6*30-7, 25, 25);
+        grphcs.fillOval(Principal.coluna*30+3, Principal.linha*30-7, 25, 25);
+        
+        repaint();
     }
 
     /**

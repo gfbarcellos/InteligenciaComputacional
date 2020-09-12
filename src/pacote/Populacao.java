@@ -10,12 +10,22 @@ public class Populacao
 {   
     private Individuo[] individuos;
     private int tamPopulacao;
+    private static int linhaSolucao = 1;
+    private static int colunaSolucao = 8;
 
     public Populacao(int numGenes, int tamPop) {
         tamPopulacao = tamPop;
         individuos = new Individuo[tamPop];
         for (int i = 0; i < individuos.length; i++) {
             individuos[i] = new Individuo(numGenes);
+        }
+    }
+    
+    public Populacao(int tamPop) {
+        tamPopulacao = tamPop;
+        individuos = new Individuo[tamPop];
+        for (int i = 0; i < individuos.length; i++) {
+            individuos[i] = null;
         }
     }
     
@@ -30,15 +40,13 @@ public class Populacao
     
      public boolean temSolucao(int linhaSolucao, int colunaSolucao) {
         Individuo i = null;
-        for (int j = 0; j < individuos.length; j++) 
+         
+        if(individuos[0].getLinhaAtual() == linhaSolucao && individuos[0].getColunaAtual() == colunaSolucao)
         {
-            if(individuos[j].getColunaAtual() == linhaSolucao && individuos[j].getColunaAtual() == colunaSolucao)
-            {
-                i = individuos[j];
-                break;
-            }
+            i = individuos[0];
         }
         if (i == null) {
+            
             return false;
         }
         return true;
@@ -81,6 +89,16 @@ public class Populacao
 
     public Individuo getIndividuo(int pos) {
         return individuos[pos];
+    }
+    
+    public int getLinhaSolucao()
+    {
+        return linhaSolucao;
+    }
+    
+    public int getColunaSolucao()
+    {
+        return colunaSolucao;
     }
 }
 

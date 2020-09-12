@@ -6,6 +6,7 @@
 package pacote;
 
 import java.time.Clock;
+import java.util.Random;
 
 /**
  *
@@ -13,10 +14,9 @@ import java.time.Clock;
  */
 public class Algoritmo 
 {   
-    private static int linhaSolucao = 1;
-    private static int colunaSolucao = 7;
-    private static double taxaDeCrossover;
-    private static double taxaDeMutacao;
+    private static int tamanhoCaminho = 20;
+    private static double taxaDeMutacao = 0.1;
+    private static double taxaDeCrossover = 0.7;
     
     public static int[][] matriz =
     {   
@@ -79,31 +79,128 @@ public class Algoritmo
         {"8","8","O","-","-"}
     };
     
-    public void setMatriz( int[][] matriz )
-    {   
-        int lm=0, cm=0;
-        for(int linha=1; linha<matriz.length-1;linha++)
-        {   
-            for(int coluna=1;coluna <matriz[0].length-1;coluna++)
-            {   
-                this.matriz[lm][cm] = matriz[linha][coluna]; 
-                cm++;
-            }   
-            lm++;
-            cm=0;
+    
+    public static Populacao novaGeracao(Populacao populacao, boolean elitismo) 
+    {
+        Random r = new Random();
+        //nova populaÃ§Ã£o do mesmo tamanho da antiga
+        Populacao novaPopulacao = new Populacao(populacao.getTamPopulacao());
+
+        //se tiver elitismo, mantÃ©m o melhor indivÃ­duo da geraÃ§Ã£o atual
+        if (elitismo) 
+        {
+            novaPopulacao.setIndividuo(populacao.getIndividuo(0));
         }
 
+        //insere novos indivÃ­duos na nova populaÃ§Ã£o, atÃ© atingir o tamanho mÃ¡ximo
+        while (novaPopulacao.getNumIndividuos() < novaPopulacao.getTamPopulacao()) {
+            //seleciona os 2 pais por torneio
+            Individuo[] pais = selecaoTorneio(populacao);
+
+            Individuo[] filhos = new Individuo[2];
+
+            //verifica a taxa de crossover, se sim realiza o crossover, se nÃ£o, mantÃ©m os pais selecionados para a prÃ³xima geraÃ§Ã£o
+            if (r.nextDouble() <= taxaDeCrossover) {
+                filhos = crossover(pais[1], pais[0]);
+            } else {
+                filhos[0] = new Individuo(pais[0].getCaminho());
+                filhos[1] = new Individuo(pais[1].getCaminho());
+            }
+
+            //adiciona os filhos na nova geraÃ§Ã£o
+            novaPopulacao.setIndividuo(filhos[0]);
+            novaPopulacao.setIndividuo(filhos[1]);
+        }
+
+        //ordena a nova populaÃ§Ã£o
+        novaPopulacao.ordenaPopulacao();
+        return novaPopulacao;
+    }
+    
+    public static Individuo[] crossover(Individuo individuo1, Individuo individuo2) {
+        Random r = new Random();
+
+        //sorteia o ponto de corte
+        int pontoCorte1 = r.nextInt((individuo1.getTamanhoInd()/2) -2) + 1;
+        int pontoCorte2 = r.nextInt((individuo1.getTamanhoInd()/2) -2) + individuo1.getTamanhoInd()/2;
+
+        Individuo[] filhos = new Individuo[2];
+
+        //pega os genes dos pais
+        String[] genePai1 = individuo1.getCaminho();
+        String[] genePai2 = individuo2.getCaminho();
+
+        String[] geneFilho1;
+        String[] geneFilho2;
+
+        geneFilho1 = copiaGenesPai(genePai1, 0, pontoCorte1);
+        geneFilho1 = juntaGenes(geneFilho1, genePai2, pontoCorte1, pontoCorte2);
+        geneFilho1= juntaGenes(geneFilho1, genePai1, pontoCorte2, tamanhoCaminho);
+        
+        geneFilho2 = copiaGenesPai(genePai2, 0, pontoCorte1);
+        geneFilho2 = juntaGenes(geneFilho2,genePai1,pontoCorte1, pontoCorte2);
+        geneFilho2 = juntaGenes(geneFilho2,genePai2,pontoCorte2,tamanhoCaminho);
+        
+        //cria o novo indivÃ­duo com os genes dos pais
+        filhos[0] = new Individuo(geneFilho1);
+        filhos[1] = new Individuo(geneFilho2);
+
+        return filhos;
+    }
+    
+    public static String[] copiaGenesPai(String[] caminho,int inicio, int fim)
+    {
+        String[] retorno = new String[tamanhoCaminho];
+        
+        for(int i = inicio; i<fim;i++)
+        {
+            retorno[i] = caminho[i];
+        }
+        
+        return retorno;
+    }
+    
+     public static String[] juntaGenes(String[] caminhoPrincipal, String[] caminho, int inicio, int fim)
+    {
+        String[] retorno = new String[tamanhoCaminho];
+        
+        for(int i = 0; i<inicio;i++)
+        {
+             retorno[i] = caminhoPrincipal[i]; //Copia a primeira parte
+        }
+        
+        for(int h = inicio; h<fim;h++)
+        {
+            retorno[h] = caminho[h]; //Copia a segunda parte
+        }
+        
+        return retorno;
+    }
+    
+    public static Individuo[] selecaoTorneio(Populacao populacao) {
+        Random r = new Random();
+        Populacao populacaoIntermediaria = new Populacao(3);
+
+        //seleciona 3 indivÃ­duos aleatÃ³riamente na populaÃ§Ã£o
+        populacaoIntermediaria.setIndividuo(populacao.getIndividuo(r.nextInt(populacao.getTamPopulacao())));
+        populacaoIntermediaria.setIndividuo(populacao.getIndividuo(r.nextInt(populacao.getTamPopulacao())));
+        populacaoIntermediaria.setIndividuo(populacao.getIndividuo(r.nextInt(populacao.getTamPopulacao())));
+
+        //ordena a populaÃ§Ã£o
+        populacaoIntermediaria.ordenaPopulacao();
+
+        Individuo[] pais = new Individuo[2];
+
+        //seleciona os 2 melhores deste populaÃ§Ã£o
+        pais[0] = populacaoIntermediaria.getIndividuo(0);
+        pais[1] = populacaoIntermediaria.getIndividuo(1);
+
+        return pais;
     }
     
     public int[][] getMatriz()
     {
         return this.matriz;
-    }
-    
-    public static void setSolucao(int linha, int coluna) 
-    {
-        Algoritmo.linhaSolucao = linha;
-        Algoritmo.colunaSolucao = coluna;
     }
     
     public static double getTaxaDeCrossover() {

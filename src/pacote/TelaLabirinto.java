@@ -28,9 +28,6 @@ public class TelaLabirinto extends JFrame
     
     public TelaLabirinto()
     {
-        Algoritmo algoritmo = new Algoritmo();
-        algoritmo.setMatriz(labirinto);
-        
         setSize(305, 338);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);     
