@@ -107,7 +107,7 @@ public class Tela extends javax.swing.JFrame {
 
         jLabel4.setText("Tamanho da população:");
 
-        valorPopulacao.setText("100");
+        valorPopulacao.setText("1000");
         valorPopulacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 valorPopulacaoActionPerformed(evt);
@@ -194,21 +194,23 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(nGeracoes)
+                            .addComponent(nGeracao2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(nAptidao, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nAptidao2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(nMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addComponent(nGeracoes))
-                    .addComponent(nGeracao2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel6)
-                        .addComponent(nAptidao, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(nAptidao2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(nMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel7)))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
@@ -235,8 +237,9 @@ public class Tela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void desenhaCaminho(String[] caminho)
+    public void desenhaCaminho(String[] caminho, int geracao, int aptidao)
     {   
+        boolean parar = false;
         linha = 10;
         coluna = 1;
         Graphics g = getGraphics();
@@ -254,16 +257,17 @@ public class Tela extends javax.swing.JFrame {
                 //sul
                 case "11": linha++;break;
                 
-                default: System.out.println("Erro no caminho");
+                default: parar = true;
             }
 
-            if(linha == 3 && coluna == 8)
+            if(linha == 3 && coluna == 8 || parar == true)
             {
                 nMovimentacao.setText(Integer.toString(i+1));
                 break;
             }
             nMovimentacao.setText(Integer.toString(i+1));
-            
+            nGeracao2.setText(Integer.toString(geracao));
+            nAptidao2.setText(Integer.toString(aptidao));
             update(g);
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -271,6 +275,11 @@ public class Tela extends javax.swing.JFrame {
                 Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
             } 
         }
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     
     public void executar(int tamPop, int crossover, int mutacao)
@@ -278,12 +287,16 @@ public class Tela extends javax.swing.JFrame {
         int numMaxGeracoes = 1500;
         int geracao = 0;
         int numSolucao = 0;
+        int tamanhoV = 5;
+        int atualV = 0;
+        int aptidaoAntiga = 5555;
         
         boolean temSolucao = false;
         boolean elitismo = true;
         
         double txcross;
         double txmutacao;
+        
         
         txcross = crossover;
         txcross = txcross /100;
@@ -301,18 +314,21 @@ public class Tela extends javax.swing.JFrame {
             temSolucao = populacao.temSolucao(1, 8);//Verifica se caiu no ponto de chegada
             //System.out.println("Geração " + geracao + " | Aptidão: " + populacao.getIndividuo(0).getAptidao() );
             
+            String[] caminho = populacao.getIndividuo(0).getCaminho();
+            if( aptidaoAntiga != populacao.getIndividuo(0).getAptidao() && temSolucao == false )
+            {
+                desenhaCaminho(caminho, geracao, populacao.getIndividuo(0).getAptidao());
+            }
+            aptidaoAntiga = populacao.getIndividuo(0).getAptidao();
             //Se possui um indivíduo com a solução
             if(temSolucao)
             {
-                String[] caminho = populacao.getIndividuo(0).getCaminho();
                 numSolucao++;
                 temSolucao = false;
                 if(numSolucao > 30)
                 {
                     //System.out.println("Encontrou solução" + "|" + distancia);
-                    nGeracao2.setText(Integer.toString(geracao));
-                    nAptidao2.setText(Integer.toString(populacao.getIndividuo(0).getAptidao()));
-                    desenhaCaminho(caminho);
+                    desenhaCaminho(caminho, geracao, populacao.getIndividuo(0).getAptidao());
                     break;
                 }
             }
